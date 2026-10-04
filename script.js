@@ -3,13 +3,7 @@
    Game Logic
 ===================================== */
 
-
-/* =====================================
-   بيانات اللعبة
-===================================== */
-
 const words = [
-
     ["شقة", "مفروشة"],
     ["لمبة", "منورة"],
     ["عربية", "مكسورة"],
@@ -47,8 +41,7 @@ const words = [
     ["تكييف", "ساقع"],
     ["باب", "مخلوع"],
     ["حبل", "مقطوع"],
-    ["كرات", "مبعثرة"],
-    ["كتاب", "مفتوح"],
+    ["كورة", "مبعثرة"],
     ["كشكول", "مبلول"],
     ["مفتاح", "ضايع"],
     ["فلوس", "مستخبية"],
@@ -58,7 +51,6 @@ const words = [
     ["مطعم", "فاضي"],
     ["ساندوتش", "ناقص"],
     ["بيتزا", "باردة"],
-    ["كوباية", "سخنة"],
     ["مياه", "متلجة"],
     ["مخدة", "ناعمة"],
     ["بطانية", "تقيلة"],
@@ -96,12 +88,11 @@ const words = [
     ["واحد", "بيتكلم"],
     ["واحد", "بيضحك"],
     ["واحد", "بيعيط"]
-
 ];
 
 
 /* =====================================
-   متغيرات اللعبة
+   بيانات الفرق
 ===================================== */
 
 let teams = [
@@ -119,8 +110,12 @@ let teams = [
     }
 ];
 
-let currentTeamIndex = 0;
 
+/* =====================================
+   متغيرات اللعبة
+===================================== */
+
+let currentTeamIndex = 0;
 let roundNumber = 1;
 
 let timeLimit = 60;
@@ -146,11 +141,8 @@ const transitionScreen = document.getElementById("transitionScreen");
 const winnerScreen = document.getElementById("winnerScreen");
 
 const timerElement = document.getElementById("timer");
-
 const currentTeamElement = document.getElementById("currentTeam");
-
 const instruction = document.getElementById("instruction");
-
 const answerButtons = document.getElementById("answerButtons");
 
 const card1 = document.getElementById("card1");
@@ -168,7 +160,8 @@ const redTeamName = document.getElementById("redTeamName");
 const bluePiece = document.getElementById("bluePiece");
 const redPiece = document.getElementById("redPiece");
 
-const roundNumberElement = document.getElementById("roundNumber");
+const roundNumberElement =
+    document.getElementById("roundNumber");
 
 
 /* =====================================
@@ -178,29 +171,29 @@ const roundNumberElement = document.getElementById("roundNumber");
 function startGame() {
 
     const team1Name =
-        document.getElementById("team1Name").value.trim() ||
-        "الفريق الأزرق";
+        document.getElementById("team1Name").value.trim()
+        || "الفريق الأزرق";
 
     const player1 =
-        document.getElementById("player1Name").value.trim() ||
-        "اللاعب الأول";
+        document.getElementById("player1Name").value.trim()
+        || "اللاعب الأول";
 
     const player2 =
-        document.getElementById("player2Name").value.trim() ||
-        "اللاعب الثاني";
+        document.getElementById("player2Name").value.trim()
+        || "اللاعب الثاني";
 
 
     const team2Name =
-        document.getElementById("team2Name").value.trim() ||
-        "الفريق الأحمر";
+        document.getElementById("team2Name").value.trim()
+        || "الفريق الأحمر";
 
     const player3 =
-        document.getElementById("player3Name").value.trim() ||
-        "اللاعب الأول";
+        document.getElementById("player3Name").value.trim()
+        || "اللاعب الأول";
 
     const player4 =
-        document.getElementById("player4Name").value.trim() ||
-        "اللاعب الثاني";
+        document.getElementById("player4Name").value.trim()
+        || "اللاعب الثاني";
 
 
     timeLimit =
@@ -227,9 +220,7 @@ function startGame() {
 
 
     currentTeamIndex = 0;
-
     roundNumber = 1;
-
     gameEnded = false;
 
 
@@ -240,8 +231,14 @@ function startGame() {
     redScore.textContent = "0";
 
 
+    bluePiece.style.left = "0";
+    redPiece.style.left = "0";
+
+
     setupScreen.classList.add("hidden");
     gameScreen.classList.remove("hidden");
+    transitionScreen.classList.add("hidden");
+    winnerScreen.classList.add("hidden");
 
 
     updateTeamUI();
@@ -252,14 +249,10 @@ function startGame() {
 
 
 /* =====================================
-   تجهيز الدور
+   تجهيز الكروت
 ===================================== */
 
 function prepareCards() {
-
-    clearInterval(timerInterval);
-
-    timeLeft = timeLimit;
 
     card1Opened = false;
     card2Opened = false;
@@ -268,34 +261,32 @@ function prepareCards() {
     card1.classList.remove("open");
     card2.classList.remove("open");
 
-    document.getElementById("card1Container")
+
+    card1.style.transform = "";
+    card2.style.transform = "";
+
+
+    document
+        .getElementById("card1Container")
         .classList.remove("disabled");
 
-    document.getElementById("card2Container")
+    document
+        .getElementById("card2Container")
         .classList.remove("disabled");
 
 
     answerButtons.classList.add("hidden");
 
 
-    timerElement.textContent = timeLeft;
-
-    timerElement.classList.remove("danger");
-
-
     currentWords = getRandomWords();
 
 
     word1.textContent = currentWords[0];
-
     word2.textContent = currentWords[1];
 
 
     instruction.textContent =
-        "افتح أول كرت عشان يبدأ الوقت";
-
-
-    updateTeamUI();
+        "افتح أول كرت عشان تبدأ";
 
 }
 
@@ -320,8 +311,12 @@ function getRandomWords() {
 
 function openCard(number) {
 
-    if (gameEnded) return;
+    if (gameEnded) {
+        return;
+    }
 
+
+    /* الكرت الأول */
 
     if (number === 1 && !card1Opened) {
 
@@ -329,15 +324,22 @@ function openCard(number) {
 
         card1.classList.add("open");
 
-        startTimer();
+
+        /* يبدأ الوقت مرة واحدة فقط */
+
+        if (!timerInterval) {
+            startTimer();
+        }
+
 
         instruction.textContent =
             "افتح الكرت الثاني";
 
-
         return;
     }
 
+
+    /* الكرت الثاني */
 
     if (
         number === 2 &&
@@ -351,7 +353,7 @@ function openCard(number) {
 
 
         instruction.textContent =
-            "وصف الكلمتين لزميلك!";
+            "اوصف الكلمتين لزميلك!";
 
 
         answerButtons.classList.remove("hidden");
@@ -362,7 +364,7 @@ function openCard(number) {
 
 
 /* =====================================
-   تشغيل الوقت
+   تشغيل المؤقت
 ===================================== */
 
 function startTimer() {
@@ -370,7 +372,7 @@ function startTimer() {
     clearInterval(timerInterval);
 
 
-    timerInterval = setInterval(() => {
+    timerInterval = setInterval(function () {
 
         timeLeft--;
 
@@ -378,15 +380,15 @@ function startTimer() {
 
 
         if (timeLeft <= 10) {
-
             timerElement.classList.add("danger");
-
         }
 
 
         if (timeLeft <= 0) {
 
             clearInterval(timerInterval);
+
+            timerInterval = null;
 
             timeOut();
 
@@ -422,15 +424,29 @@ function answer(isCorrect) {
 
 
 /* =====================================
-   صح
+   الإجابة الصحيحة
+   الوقت يفضل شغال
 ===================================== */
 
 function correctAnswer() {
 
+    /*
+       إضافة نقطة
+    */
+
     teams[currentTeamIndex].score++;
+
+
+    /*
+       تحريك الفريق خانة
+    */
 
     teams[currentTeamIndex].position++;
 
+
+    /*
+       تحديث النقاط والبورد
+    */
 
     updateScores();
 
@@ -438,7 +454,7 @@ function correctAnswer() {
 
 
     /*
-       لو وصل الفريق للنهاية
+       لو الفريق وصل للنهاية
     */
 
     if (teams[currentTeamIndex].position >= 10) {
@@ -458,7 +474,7 @@ function correctAnswer() {
 
 
     /*
-       حركة الكروت
+       حركة الكروت القديمة
     */
 
     card1.style.transform =
@@ -468,31 +484,34 @@ function correctAnswer() {
         "translateX(-120px) rotate(-15deg)";
 
 
-    setTimeout(() => {
+    /*
+       بعد الحركة نجيب كروت جديدة
+       من غير ما نوقف المؤقت
+    */
+
+    setTimeout(function () {
 
         card1.style.transform = "";
         card2.style.transform = "";
 
         prepareCards();
 
-    }, 350);
+    }, 300);
 
 }
 
 
 /* =====================================
-   غلط
+   الإجابة الغلط
+   تنهي الدور
 ===================================== */
 
 function wrongAnswer() {
 
     clearInterval(timerInterval);
 
+    timerInterval = null;
 
-    /*
-       لا توجد نقطة
-       والدور ينتهي فورًا
-    */
 
     showTransition(
         "❌",
@@ -509,6 +528,11 @@ function wrongAnswer() {
 
 function timeOut() {
 
+    clearInterval(timerInterval);
+
+    timerInterval = null;
+
+
     showTransition(
         "⏰",
         "الوقت خلص!",
@@ -519,7 +543,7 @@ function timeOut() {
 
 
 /* =====================================
-   شاشة الانتقال
+   شاشة الانتقال للفريق الثاني
 ===================================== */
 
 function showTransition(icon, title, text) {
@@ -543,9 +567,13 @@ function showTransition(icon, title, text) {
         teams[currentTeamIndex === 0 ? 1 : 0];
 
 
-    document.querySelector(
-        ".transition-content button"
-    ).textContent =
+    const nextButton =
+        document.querySelector(
+            ".transition-content button"
+        );
+
+
+    nextButton.textContent =
         `ابدأ دور ${nextTeam.name}`;
 
 }
@@ -558,7 +586,9 @@ function showTransition(icon, title, text) {
 function nextTurn() {
 
     currentTeamIndex =
-        currentTeamIndex === 0 ? 1 : 0;
+        currentTeamIndex === 0
+            ? 1
+            : 0;
 
 
     roundNumber++;
@@ -569,13 +599,35 @@ function nextTurn() {
     gameScreen.classList.remove("hidden");
 
 
+    /*
+       تصفير مؤقت الدور الجديد
+    */
+
+    timeLeft = timeLimit;
+
+    timerElement.textContent = timeLeft;
+
+    timerElement.classList.remove("danger");
+
+
+    /*
+       مهم:
+       المؤقت مش بيبدأ هنا.
+       يبدأ أول ما أول كرت يتفتح.
+    */
+
+    timerInterval = null;
+
+
+    updateTeamUI();
+
     prepareCards();
 
 }
 
 
 /* =====================================
-   تحديث بيانات الفريق
+   تحديث بيانات الفريق الحالي
 ===================================== */
 
 function updateTeamUI() {
@@ -584,18 +636,21 @@ function updateTeamUI() {
         teams[currentTeamIndex];
 
 
-    currentTeamElement.textContent =
-        currentTeamIndex === 0
-            ? `🔵 ${team.name}`
-            : `🔴 ${team.name}`;
+    if (currentTeamIndex === 0) {
+
+        currentTeamElement.textContent =
+            `🔵 ${team.name}`;
+
+    } else {
+
+        currentTeamElement.textContent =
+            `🔴 ${team.name}`;
+
+    }
 
 
     roundNumberElement.textContent =
         `الجولة ${roundNumber}`;
-
-
-    instruction.textContent =
-        "افتح أول كرت عشان يبدأ الوقت";
 
 }
 
@@ -621,18 +676,6 @@ function updateScores() {
 
 function updateBoard() {
 
-    const track =
-        document.querySelector(".board-track");
-
-    const cells =
-        track.querySelectorAll(".board-cell");
-
-
-    /*
-       عرض البورد 10 خانات
-       نحسب مكان القطعة كنسبة مئوية
-    */
-
     const maxPosition = 10;
 
 
@@ -643,11 +686,6 @@ function updateBoard() {
     const redPercent =
         (teams[1].position / maxPosition) * 100;
 
-
-    /*
-       لأن القطعة absolute
-       نحركها على طول البورد
-    */
 
     bluePiece.style.left =
         `calc(${bluePercent}% - 13px)`;
@@ -669,57 +707,53 @@ function endGame() {
 
     clearInterval(timerInterval);
 
+    timerInterval = null;
+
 
     const blue = teams[0];
 
     const red = teams[1];
 
 
-    let winner;
+    let winner = null;
 
 
     if (blue.score > red.score) {
 
         winner = blue;
 
-    } else if (red.score > blue.score) {
+    }
+
+    else if (red.score > blue.score) {
 
         winner = red;
 
-    } else {
-
-        /*
-           في حالة التعادل
-        */
-
-        document.getElementById("winnerName")
-            .textContent = "تعادل!";
-
-        document.getElementById("finalScore")
-            .textContent =
-            `${blue.score} - ${red.score}`;
-
-        gameScreen.classList.add("hidden");
-
-        winnerScreen.classList.remove("hidden");
-
-        return;
-
     }
-
-
-    document.getElementById("winnerName")
-        .textContent = winner.name;
-
-
-    document.getElementById("finalScore")
-        .textContent =
-        `${blue.score} - ${red.score}`;
 
 
     gameScreen.classList.add("hidden");
 
     winnerScreen.classList.remove("hidden");
+
+
+    if (!winner) {
+
+        document.getElementById("winnerName")
+            .textContent = "تعادل!";
+
+    }
+
+    else {
+
+        document.getElementById("winnerName")
+            .textContent = winner.name;
+
+    }
+
+
+    document.getElementById("finalScore")
+        .textContent =
+        `${blue.score} - ${red.score}`;
 
 }
 
@@ -732,14 +766,15 @@ function restartGame() {
 
     clearInterval(timerInterval);
 
+    timerInterval = null;
+
+
     winnerScreen.classList.add("hidden");
+
+    transitionScreen.classList.add("hidden");
 
     setupScreen.classList.remove("hidden");
 
-
-    /*
-       تصفير البيانات
-    */
 
     teams[0].score = 0;
     teams[0].position = 0;
@@ -747,14 +782,20 @@ function restartGame() {
     teams[1].score = 0;
     teams[1].position = 0;
 
+
     currentTeamIndex = 0;
 
     roundNumber = 1;
 
     gameEnded = false;
 
+    timeLeft = timeLimit;
+
 
     bluePiece.style.left = "0";
     redPiece.style.left = "0";
 
-}
+
+    timerElement.classList.remove("danger");
+
+   }
