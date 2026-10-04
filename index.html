@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>بدون تهتهه</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- =========================
+         شاشة البداية
+    ========================== -->
+
+    <section id="setupScreen" class="screen setup-screen">
+
+        <div class="logo">
+            <div class="logo-icon">🃏</div>
+            <h1>بدون تهتهه</h1>
+            <p>قولها بسرعة... قبل ما الوقت يخلص!</p>
+        </div>
+
+        <div class="setup-box">
+
+            <h2>جهزوا الفرق</h2>
+
+            <div class="team-inputs">
+
+                <div class="team-input team-blue">
+                    <div class="team-title">
+                        <span>🔵</span>
+                        الفريق الأول
+                    </div>
+
+                    <input id="team1Name" type="text" placeholder="اسم الفريق">
+
+                    <input id="player1Name" type="text" placeholder="اللاعب الأول">
+
+                    <input id="player2Name" type="text" placeholder="اللاعب الثاني">
+                </div>
+
+                <div class="vs">VS</div>
+
+                <div class="team-input team-red">
+                    <div class="team-title">
+                        <span>🔴</span>
+                        الفريق الثاني
+                    </div>
+
+                    <input id="team2Name" type="text" placeholder="اسم الفريق">
+
+                    <input id="player3Name" type="text" placeholder="اللاعب الأول">
+
+                    <input id="player4Name" type="text" placeholder="اللاعب الثاني">
+                </div>
+
+            </div>
+
+            <div class="settings">
+
+                <label>
+                    وقت الدور
+                    <select id="timeSelect">
+                        <option value="30">30 ثانية</option>
+                        <option value="45">45 ثانية</option>
+                        <option value="60" selected>60 ثانية</option>
+                        <option value="90">90 ثانية</option>
+                    </select>
+                </label>
+
+            </div>
+
+            <button class="start-btn" onclick="startGame()">
+                ابدأ اللعبة
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         شاشة اللعبة
+    ========================== -->
+
+    <section id="gameScreen" class="screen game-screen hidden">
+
+        <header class="game-header">
+
+            <div class="current-team" id="currentTeam">
+                🔵 الفريق الأول
+            </div>
+
+            <div class="timer" id="timer">
+                60
+            </div>
+
+            <div class="round-number" id="roundNumber">
+                الجولة 1
+            </div>
+
+        </header>
+
+
+        <!-- البورد -->
+
+        <div class="board-section">
+
+            <div class="board">
+
+                <div class="finish">🏆</div>
+
+                <div class="board-track">
+
+                    <div class="board-cell">1</div>
+                    <div class="board-cell">2</div>
+                    <div class="board-cell">3</div>
+                    <div class="board-cell">4</div>
+                    <div class="board-cell">5</div>
+                    <div class="board-cell">6</div>
+                    <div class="board-cell">7</div>
+                    <div class="board-cell">8</div>
+                    <div class="board-cell">9</div>
+                    <div class="board-cell">10</div>
+
+                    <div id="bluePiece" class="piece blue-piece">
+                        🔵
+                    </div>
+
+                    <div id="redPiece" class="piece red-piece">
+                        🔴
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="scores">
+
+                <div class="score blue-score">
+                    <span id="blueTeamName">الفريق الأول</span>
+                    <strong id="blueScore">0</strong>
+                </div>
+
+                <div class="score red-score">
+                    <span id="redTeamName">الفريق الثاني</span>
+                    <strong id="redScore">0</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- الكروت -->
+
+        <main class="cards-area">
+
+            <div class="instruction" id="instruction">
+                افتح أول كرت عشان تبدأ!
+            </div>
+
+            <div class="cards">
+
+                <div class="card-container" id="card1Container">
+
+                    <div class="card" id="card1" onclick="openCard(1)">
+
+                        <div class="card-face card-front">
+                            <div class="card-logo">🃏</div>
+                            <span>افتحني</span>
+                        </div>
+
+                        <div class="card-face card-back">
+                            <span id="word1">---</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-container" id="card2Container">
+
+                    <div class="card" id="card2" onclick="openCard(2)">
+
+                        <div class="card-face card-front">
+                            <div class="card-logo">🃏</div>
+                            <span>افتحني</span>
+                        </div>
+
+                        <div class="card-face card-back">
+                            <span id="word2">---</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- أزرار الإجابة -->
+
+            <div class="answer-buttons hidden" id="answerButtons">
+
+                <button class="correct-btn" onclick="answer(true)">
+                    <span>✓</span>
+                    صح
+                </button>
+
+                <button class="wrong-btn" onclick="answer(false)">
+                    <span>✕</span>
+                    غلط
+                </button>
+
+            </div>
+
+        </main>
+
+    </section>
+
+
+    <!-- =========================
+         شاشة الانتقال
+    ========================== -->
+
+    <section id="transitionScreen" class="screen transition-screen hidden">
+
+        <div class="transition-content">
+
+            <div class="transition-icon" id="transitionIcon">
+                🔄
+            </div>
+
+            <h2 id="transitionTitle">
+                الدور خلص!
+            </h2>
+
+            <p id="transitionText">
+                جهزوا الفريق الثاني
+            </p>
+
+            <button onclick="nextTurn()">
+                ابدأ الدور
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         شاشة الفوز
+    ========================== -->
+
+    <section id="winnerScreen" class="screen winner-screen hidden">
+
+        <div class="winner-content">
+
+            <div class="winner-trophy">
+                🏆
+            </div>
+
+            <p>الفائز هو</p>
+
+            <h1 id="winnerName">
+                الفريق الأول
+            </h1>
+
+            <div class="final-score" id="finalScore">
+                10 - 8
+            </div>
+
+            <button onclick="restartGame()">
+                العبوا تاني
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+              </html>
