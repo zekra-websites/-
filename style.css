@@ -1,0 +1,606 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Cairo", sans-serif;
+    background:
+        radial-gradient(circle at top, #24283d 0%, #10121c 45%, #080910 100%);
+    color: white;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+button,
+input,
+select {
+    font-family: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.hidden {
+    display: none !important;
+}
+
+
+/* =========================
+   الشاشات
+========================= */
+
+.screen {
+    min-height: 100vh;
+    width: 100%;
+}
+
+
+/* =========================
+   شاشة البداية
+========================= */
+
+.setup-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 15px;
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logo-icon {
+    font-size: 65px;
+    margin-bottom: 5px;
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, .4));
+}
+
+.logo h1 {
+    font-size: 48px;
+    font-weight: 900;
+    letter-spacing: -2px;
+}
+
+.logo p {
+    color: #aeb3c7;
+    margin-top: 5px;
+}
+
+.setup-box {
+    width: min(850px, 100%);
+    background: rgba(255, 255, 255, .06);
+    border: 1px solid rgba(255, 255, 255, .1);
+    border-radius: 25px;
+    padding: 30px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 25px 70px rgba(0, 0, 0, .35);
+}
+
+.setup-box h2 {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.team-inputs {
+    display: grid;
+    grid-template-columns: 1fr 70px 1fr;
+    align-items: center;
+    gap: 15px;
+}
+
+.team-input {
+    padding: 20px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, .1);
+}
+
+.team-blue {
+    background: rgba(30, 110, 255, .1);
+}
+
+.team-red {
+    background: rgba(255, 60, 70, .1);
+}
+
+.team-title {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.team-title span {
+    margin-left: 5px;
+}
+
+.vs {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 900;
+    color: #777d94;
+}
+
+.team-input input {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    padding: 13px 15px;
+    background: rgba(0, 0, 0, .25);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, .1);
+    outline: none;
+    border-radius: 12px;
+    font-size: 14px;
+}
+
+.team-input input:focus {
+    border-color: #777cff;
+}
+
+.settings {
+    margin-top: 20px;
+}
+
+.settings label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    background: rgba(255, 255, 255, .04);
+    padding: 12px 15px;
+    border-radius: 12px;
+}
+
+.settings select {
+    background: #1c1f2c;
+    color: white;
+    border: 1px solid #363a4d;
+    border-radius: 8px;
+    padding: 7px 12px;
+}
+
+.start-btn,
+.transition-content button,
+.winner-content button {
+    width: 100%;
+    border: 0;
+    border-radius: 15px;
+    padding: 16px;
+    margin-top: 20px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    font-size: 17px;
+    font-weight: 900;
+    transition: .2s;
+}
+
+.start-btn:hover,
+.transition-content button:hover,
+.winner-content button:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+
+/* =========================
+   شاشة اللعبة
+========================= */
+
+.game-screen {
+    padding-bottom: 30px;
+}
+
+.game-header {
+    width: min(1000px, calc(100% - 25px));
+    margin: auto;
+    padding: 18px 0;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+}
+
+.current-team {
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.round-number {
+    text-align: left;
+    color: #9da3b8;
+    font-size: 14px;
+}
+
+.timer {
+    min-width: 85px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, .07);
+    border: 2px solid rgba(255, 255, 255, .1);
+    border-radius: 20px;
+    font-size: 35px;
+    font-weight: 900;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .2);
+}
+
+.timer.danger {
+    color: #ff4d5d;
+    border-color: rgba(255, 60, 70, .5);
+    animation: timerShake .5s infinite;
+}
+
+@keyframes timerShake {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.04);
+    }
+}
+
+
+/* =========================
+   البورد
+========================= */
+
+.board-section {
+    width: min(1000px, calc(100% - 25px));
+    margin: 10px auto 30px;
+}
+
+.board {
+    position: relative;
+    background: rgba(255, 255, 255, .05);
+    border: 1px solid rgba(255, 255, 255, .08);
+    padding: 18px 25px;
+    border-radius: 20px;
+}
+
+.board-track {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 8px;
+}
+
+.board-cell {
+    height: 38px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .08);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #777d94;
+    font-size: 12px;
+}
+
+.finish {
+    position: absolute;
+    left: 8px;
+    top: -12px;
+    font-size: 25px;
+    z-index: 3;
+}
+
+.piece {
+    position: absolute;
+    top: -8px;
+    font-size: 27px;
+    transition: .5s cubic-bezier(.2, .8, .2, 1);
+    filter: drop-shadow(0 5px 8px rgba(0, 0, 0, .4));
+}
+
+.blue-piece {
+    left: 0;
+}
+
+.red-piece {
+    left: 0;
+    top: 25px;
+}
+
+.scores {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.score {
+    padding: 10px 15px;
+    border-radius: 13px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+}
+
+.score strong {
+    font-size: 22px;
+}
+
+.blue-score {
+    background: rgba(40, 110, 255, .1);
+}
+
+.red-score {
+    background: rgba(255, 60, 70, .1);
+}
+
+
+/* =========================
+   الكروت
+========================= */
+
+.cards-area {
+    width: min(800px, calc(100% - 25px));
+    margin: auto;
+    text-align: center;
+}
+
+.instruction {
+    color: #aeb3c7;
+    font-size: 15px;
+    margin-bottom: 25px;
+}
+
+.cards {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    perspective: 1200px;
+}
+
+.card-container {
+    width: 220px;
+    height: 310px;
+    perspective: 1000px;
+}
+
+.card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform .65s cubic-bezier(.2, .8, .2, 1);
+    cursor: pointer;
+}
+
+.card.open {
+    transform: rotateY(180deg);
+}
+
+.card-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    border-radius: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.card-front {
+    background:
+        linear-gradient(135deg, #272b42, #141622);
+    border: 2px solid rgba(255, 255, 255, .12);
+    box-shadow:
+        0 20px 45px rgba(0, 0, 0, .35),
+        inset 0 0 0 7px rgba(255, 255, 255, .025);
+}
+
+.card-front::before {
+    content: "";
+    position: absolute;
+    inset: 12px;
+    border: 1px dashed rgba(255, 255, 255, .15);
+    border-radius: 18px;
+}
+
+.card-logo {
+    font-size: 65px;
+    margin-bottom: 15px;
+}
+
+.card-front span {
+    font-size: 16px;
+    color: #aaaec0;
+    font-weight: 700;
+    z-index: 1;
+}
+
+.card-back {
+    transform: rotateY(180deg);
+    background: linear-gradient(135deg, #ffffff, #e9ebf4);
+    color: #161827;
+    border: 5px solid #d7dae6;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, .3);
+}
+
+.card-back span {
+    font-size: 29px;
+    font-weight: 900;
+    padding: 20px;
+}
+
+.card-container.disabled {
+    opacity: .7;
+    pointer-events: none;
+}
+
+
+/* =========================
+   أزرار صح وغلط
+========================= */
+
+.answer-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.answer-buttons button {
+    border: 0;
+    padding: 16px;
+    border-radius: 15px;
+    color: white;
+    font-size: 18px;
+    font-weight: 900;
+    transition: .2s;
+}
+
+.answer-buttons button span {
+    font-size: 24px;
+    margin-left: 5px;
+}
+
+.correct-btn {
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+}
+
+.wrong-btn {
+    background: linear-gradient(135deg, #dc2626, #ef4444);
+}
+
+.answer-buttons button:hover {
+    transform: translateY(-3px);
+}
+
+
+/* =========================
+   الانتقال
+========================= */
+
+.transition-screen,
+.winner-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+}
+
+.transition-content,
+.winner-content {
+    width: min(500px, 100%);
+    text-align: center;
+    background: rgba(255, 255, 255, .06);
+    border: 1px solid rgba(255, 255, 255, .1);
+    border-radius: 25px;
+    padding: 40px 30px;
+    box-shadow: 0 25px 70px rgba(0, 0, 0, .4);
+}
+
+.transition-icon,
+.winner-trophy {
+    font-size: 70px;
+    margin-bottom: 15px;
+}
+
+.transition-content h2,
+.winner-content h1 {
+    font-size: 30px;
+    font-weight: 900;
+}
+
+.transition-content p,
+.winner-content p {
+    color: #aeb3c7;
+    margin-top: 7px;
+}
+
+.winner-content h1 {
+    color: #facc15;
+}
+
+.final-score {
+    margin-top: 15px;
+    font-size: 30px;
+    font-weight: 900;
+}
+
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 650px) {
+
+    .logo h1 {
+        font-size: 38px;
+    }
+
+    .setup-box {
+        padding: 20px 15px;
+    }
+
+    .team-inputs {
+        grid-template-columns: 1fr;
+    }
+
+    .vs {
+        display: none;
+    }
+
+    .team-inputs {
+        gap: 12px;
+    }
+
+    .cards {
+        gap: 12px;
+    }
+
+    .card-container {
+        width: calc(50vw - 25px);
+        height: 270px;
+        max-width: 190px;
+    }
+
+    .card-back span {
+        font-size: 24px;
+    }
+
+    .game-header {
+        grid-template-columns: 1fr auto;
+    }
+
+    .round-number {
+        display: none;
+    }
+
+    .timer {
+        min-width: 70px;
+        height: 58px;
+        font-size: 29px;
+    }
+
+    .board {
+        padding: 15px 10px;
+    }
+
+    .board-track {
+        gap: 4px;
+    }
+
+    .board-cell {
+        height: 30px;
+        font-size: 9px;
+    }
+
+    .piece {
+        font-size: 21px;
+    }
+
+    .red-piece {
+        top: 22px;
+    }
+  }
